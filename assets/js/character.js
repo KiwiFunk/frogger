@@ -3,6 +3,8 @@ class Character {
     this.name = name;
     this.x = x;
     this.y = y;
+    this.width = 40;
+    this.height = 40;
   }
 
   move(dx, dy) {
@@ -11,6 +13,6 @@ class Character {
   }
 
   updateSprite() {
-    // Update the character's sprite based on its current position
+    // No sprite yet, but you could animate here
   }
 }

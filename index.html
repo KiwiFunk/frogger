@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Stylesheet -->
+    <!-- Stylesheet import -->
     <link rel="stylesheet" href="./assets/css/style.css">
-    <title>Document</title>
+    <title>Frogger</title>
 </head>
 <body>
+
+    <!-- This section contains all game related content -->
+    <section id="game">
+        <div id="user-interface">
+            <div id="score-ui">
+                <span class="label">Score: </span>
+                <span id="score-value">0</span>
+            </div>
+            <div id="lives-ui">
+                <span class="label">Lives: </span>
+                <span id="lives-value">3</span>
+            </div>
+        </div>
+        <div id="game-container">
+            <canvas id="game-canvas" width="500" height="500"></canvas>
+        </div>
+    </section>
     
-    <!-- Scripts -->
-    <script src="./assets/js/script.js"></script>
+    <!-- JavaScript Imports-->
+    <script src="./assets/js/character.js"></script>
+    <script src="./assets/js/obstacle.js"></script>
+    <script src="./assets/js/game.js"></script>
 </body>
 </html>
