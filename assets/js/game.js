@@ -1,10 +1,14 @@
 const GRID_UNIT = 50;
+const GAME_HEIGHT = 800;
+const GAME_WIDTH = 600;
 
 //Add canvas variables and use these in HTML to set canvas size
 //Logic will also need to be implmented in constructor for obstacles.
 
 // Link Canvas from HTML
 const canvas = document.getElementById('game-canvas');
+canvas.width = GAME_WIDTH;
+canvas.height = GAME_HEIGHT;
 const ctx = canvas.getContext('2d');
 
 // Initialize the main character
@@ -36,7 +40,7 @@ const OBSTACLE_MAX = 3;
 const MAX_SPEED = 4;
 const obstacles = [];
 // Sets are like lists, however will not allow storing of duplicate values.
-const usedPositions = new Set();
+const usedY = new Set();
 
 function getUniqueGridPos() {
 
@@ -45,10 +49,9 @@ function getUniqueGridPos() {
   while (attempts < 100) {
     const xIndex = Math.floor(Math.random() * 10 + 1) * GRID_UNIT;;
     const yIndex = Math.floor(Math.random() * 10 + 1) * GRID_UNIT;;
-    const key = `${xIndex},${yIndex}`;
 
-    if (!usedPositions.has(key)) {
-      usedPositions.add(key);
+    if (!usedY.has(yIndex)) {
+      usedY.add(yIndex);
       return {
         x: xIndex,
         y: yIndex
@@ -56,7 +59,7 @@ function getUniqueGridPos() {
     }
     attempts++;
   }
-  throw new Error("Unable to find unique grid position");
+  throw new Error("Unable to find unique height position");
 }
 
 for (let i = 0; i < OBSTACLE_MAX; i++) {
