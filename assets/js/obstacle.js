@@ -1,5 +1,5 @@
 class Obstacle {
-    constructor(x, y, speed, width = 60, height = 50) {
+    constructor(x, y, speed, width = 80, height = 50) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -9,7 +9,6 @@ class Obstacle {
 
     updatePosition() {
         this.x += this.speed;
-        if (this.x > 500) this.x = -this.width; // Loop obstacle
     }
 
     draw(ctx) {

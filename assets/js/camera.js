@@ -4,7 +4,7 @@ class Camera {
         this.y = 0;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-        this.followOffset = gameHeight * 0.7; // Keep player 70% from top
+        this.followOffset = gameHeight * 0.3; // Keep player 30% from top
     }
 
     follow(target) {
