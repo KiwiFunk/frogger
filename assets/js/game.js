@@ -11,8 +11,11 @@ canvas.width = GAME_WIDTH;
 canvas.height = GAME_HEIGHT;
 const ctx = canvas.getContext('2d');
 
+// Init Camera
+const camera = new Camera(GAME_WIDTH, GAME_HEIGHT);
+
 // Initialize the main character
-const player = new Character('Frog', 100, 400);
+const player = new Character('Frog', GAME_WIDTH / 2, GAME_HEIGHT - 100);
 
 // Listen for keyboard input to move the character
 const keyMap = {
@@ -34,6 +37,9 @@ document.addEventListener('keydown', (e) => {
   } else if (keyMap.right.includes(key)) {
     player.move(GRID_UNIT, 0);
   }
+
+   // Keep player within screen bounds horizontally
+  player.x = Math.max(0, Math.min(GAME_WIDTH - player.width, player.x));
 });
 
 const OBSTACLE_MAX = 3;
@@ -74,12 +80,28 @@ for (let i = 0; i < OBSTACLE_MAX; i++) {
 function drawGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw obstacles
-    obstacles.forEach(ob => ob.draw(ctx));
+    // Update camera to follow player
+    camera.follow(player);
 
-    // Draw the player as a green rectangle
+    // Draw obstacles (only visible ones for performance)
+    obstacles.forEach(ob => {
+        if (camera.isVisible(ob)) {
+            const screenPos = camera.worldToScreen(ob.x, ob.y);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(screenPos.x, screenPos.y, ob.width, ob.height);
+        }
+    });
+
+    // Draw the player
+    const playerScreenPos = camera.worldToScreen(player.x, player.y);
     ctx.fillStyle = 'green';
-    ctx.fillRect(player.x, player.y, player.width, player.height);
+    ctx.fillRect(playerScreenPos.x, playerScreenPos.y, player.width, player.height);
+    
+    // Draw world coordinate debug info
+    ctx.fillStyle = 'black';
+    ctx.font = '16px Arial';
+    ctx.fillText(`Player Y: ${Math.round(player.y)}`, 10, 30);
+    ctx.fillText(`Camera Y: ${Math.round(camera.y)}`, 10, 50);
 }
 
 // Game loop
@@ -89,14 +111,23 @@ function gameLoop() {
     // Update obstacles
     obstacles.forEach(ob => ob.updatePosition());
 
+    // Respawn obstacles that have moved off screen
+    obstacles.forEach(ob => {
+        if (ob.x > GAME_WIDTH + 100) {
+            ob.x = -ob.width - 50;
+            // Optionally randomize Y position when respawning
+            if (Math.random() < 0.1) { // 10% chance to change lanes
+                ob.y = camera.y + Math.random() * GAME_HEIGHT;
+            }
+        }
+    });
+
     // Check collisions
     obstacles.forEach(ob => {
         if (ob.checkCollision(player)) {
-            // Handle collision
-            player.takeDamage(ob.damage);
             // Reset player position on collision
-            player.x = 100;
-            player.y = 400;
+            player.x = GAME_WIDTH / 2;
+            player.y = Math.max(player.y, camera.y + GAME_HEIGHT - 100);
         }
     });
 
