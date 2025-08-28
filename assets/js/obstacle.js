@@ -1,5 +1,5 @@
 class Obstacle {
-    constructor(x, y, width = 60, height = 40, speed = 2) {
+    constructor(x, y, speed, width = 60, height = 50) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -13,7 +13,7 @@ class Obstacle {
     }
 
     draw(ctx) {
-        ctx.fillStyle = 'brown';
+        ctx.fillStyle = 'red';
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
