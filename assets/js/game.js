@@ -29,17 +29,20 @@ document.addEventListener('keydown', (e) => {
   const key = e.key;
 
   if (keyMap.up.includes(key)) {
-    player.move(0, -GRID_UNIT);
+    player.move(0, -GRID_UNIT); // Moving up decreases Y
   } else if (keyMap.down.includes(key)) {
-    player.move(0, GRID_UNIT);
+    player.move(0, GRID_UNIT);  // Moving down increases Y
   } else if (keyMap.left.includes(key)) {
     player.move(-GRID_UNIT, 0);
   } else if (keyMap.right.includes(key)) {
     player.move(GRID_UNIT, 0);
   }
 
-   // Keep player within screen bounds horizontally
+  // Keep player within screen bounds horizontally
   player.x = Math.max(0, Math.min(GAME_WIDTH - player.width, player.x));
+  
+  // Prevent player from going below starting position
+  player.y = Math.min(GAME_HEIGHT - 100, player.y);
 });
 
 const OBSTACLE_MAX = 3;
@@ -102,6 +105,7 @@ function drawGame() {
     ctx.font = '16px Arial';
     ctx.fillText(`Player Y: ${Math.round(player.y)}`, 10, 30);
     ctx.fillText(`Camera Y: ${Math.round(camera.y)}`, 10, 50);
+    ctx.fillText(`Progress: ${Math.round((GAME_HEIGHT - 100 - player.y) / GRID_UNIT)}`, 10, 70);
 }
 
 // Game loop
